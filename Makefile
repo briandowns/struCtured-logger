@@ -29,6 +29,15 @@ ifeq ($(UNAME_S),Darwin)
 	cp $(NAME).$(VERSION).dylib $(INCDIR)
 endif
 
+uninstall:
+	rm -f $(INCDIR)/$(SRCDIR)/$(NAME).h
+ifeq ($(UNAME_S),Linux)
+	rm -f $(INCDIR)/$(NAME).$(VERSION).so
+endif
+ifeq ($(UNAME_S),Darwin)
+	rm -f $(INCDIR)/$(NAME).$(VERSION).dylib
+endif
+
 .PHONY:
 test: clean
 	$(CC) -o $(TSTDIR)/$(TSTDIR) $(TSTDIR)/$(TSTDIR).c $(SRCDIR)/slog.c $(TSTDIR)/unity/unity.c $(CFLAGS)

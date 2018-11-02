@@ -16,11 +16,11 @@
 /**
  * slog field types
  */
-enum {
-    SLOG_FIELD_INT,
-    SLOG_FIELD_LONG,
-    SLOG_FIELD_DOUBLE,
-    SLOG_FIELD_STRING,
+static enum {
+    SLOG_INT,
+    SLOG_INT64,
+    SLOG_DOUBLE,
+    SLOG_STRING,
 };
 
 /**
@@ -29,18 +29,20 @@ enum {
 typedef struct {
     uint8_t type;
     union {
-        int    value;
-        long   value;
-        double value;
-        char   *value;
+        int int_value;
+        int64_t int64_value;
+        double double_value;
+        char *char_value;
     };
-} slog_field_t;
+} slog_field_t;  
+
+slog_field_t *slog_field_int(void *value);
 
 /**
  * slog_output contains the location we're
  * going to write our log entries to
  */
-struct _IO_FILE *slog_output;
+FILE *slog_output;
 
 enum {
     SLOG_OUT_STDERR,
@@ -51,7 +53,7 @@ enum {
  * slog_init initializes the logger and sets up
  * where the logger writes to.
  */
-void slog_init(uint8_t out);
+void slog_init(FILE *out);
 
 /**
  * reallog provides the functionality of the logger. Returns
