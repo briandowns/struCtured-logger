@@ -1,6 +1,6 @@
-#include "src/log.h"
+#include "src/slog.h"
 
 int main(int argc, char **argv) {
-    slog_init(LOG_OUT_STDOUT);
-    slog(LOG_INFO, "msg", "records added successfully", "count", "2");
+    slog_init(SLOG_OUT_STDOUT);
+    slog(SLOG_INFO, "msg", "records added successfully", "count", "2");
 }

@@ -20,8 +20,8 @@ void slog_init(uint8_t out) {
 int reallog(char *l, ...)  {
     va_list ap;
 
-    unsigned long now = (unsigned long)time(NULL);
-    struct json_object *root =json_object_new_object();;
+    unsigned long now = (unsigned long)time(NULL); // UNIX timestamp format
+    struct json_object *root = json_object_new_object(); 
     json_object_object_add(root, "timestamp", json_object_new_int64(now));
 
     va_start(ap, l);
@@ -42,7 +42,7 @@ int reallog(char *l, ...)  {
     va_end(ap);
 
     int wc = fprintf(slog_output, "%s\n", json_object_to_json_string(root));
-    json_object_put(root);
+    json_object_put(root); // decrement the count on the JSON object
 
     return  wc;
 }
