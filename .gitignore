@@ -1,0 +1,7 @@
+unity/libunity.a
+
+*.o
+*.so
+*.dynlib
+
+.vscode/*
