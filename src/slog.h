@@ -1,5 +1,5 @@
-#ifndef _STRUCTURED_LOG_H
-#define _STRUCTURED_LOG_H
+#ifndef _SLOG_H
+#define _SLOG_H
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -12,6 +12,23 @@
 #define SLOG_WARN  "warn"
 #define SLOG_ERROR "error"
 #define SLOG_FATAL "fatal"
+
+enum {
+    SLOG_FIELD_INT,
+    SLOG_FIELD_LONG,
+    SLOG_FIELD_DOUBLE,
+    SLOG_FIELD_STRING,
+};
+
+typedef struct {
+    uint8_t type;
+    union {
+        int    value;
+        long   value;
+        double value;
+        char   *value;
+    };
+} slog_field_t;
 
 /**
  * slog_output contains the location we're
@@ -42,4 +59,4 @@ int reallog(char *l, ...);
  */
 #define slog(l, ...) ({ reallog(l, __VA_ARGS__, NULL); })
 
-#endif // end _STRUCTURED_LOG_H 
+#endif // end _SLOG_H 
