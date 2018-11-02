@@ -13,6 +13,9 @@
 #define SLOG_ERROR "error"
 #define SLOG_FATAL "fatal"
 
+/**
+ * slog field types
+ */
 enum {
     SLOG_FIELD_INT,
     SLOG_FIELD_LONG,
@@ -20,6 +23,9 @@ enum {
     SLOG_FIELD_STRING,
 };
 
+/**
+ * slog_field_t
+ */
 typedef struct {
     uint8_t type;
     union {
