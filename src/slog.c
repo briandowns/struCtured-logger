@@ -31,9 +31,24 @@ int reallog(char *l, ...)  {
             break;
         }
         if (i % 2 != 0) {
-            char *arg2 = va_arg(ap, char *);
+            // replace this type from char * to slog_field_t and do 
+            // whatever is needed based on the type
+            // char *arg2 = va_arg(ap, char *);
+            // if (arg2 == NULL) {
+            //     break;
+            // }
+            void *arg2 = va_arg(ap, char *);
             if (arg2 == NULL) {
                 break;
+            }
+            slog_field_t *sf = va_arg(ap, char *);
+            switch (sf->type) {
+                case SLOG_FIELD_INT:
+                    json_object_object_add(root, arg1, json_object_new_string((int)arg2));
+                case SLOG_FIELD_LONG:
+                case SLOG_FIELD_DOUBLE:
+                case SLOG_FIELD_STRING:
+                    json_object_object_add(root, arg1, json_object_new_string((char *)arg2));
             }
             json_object_object_add(root, arg1, json_object_new_string(arg2));
             continue;
