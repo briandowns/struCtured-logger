@@ -4,24 +4,21 @@
 
 #include <json-c/json.h>
 
-#include "log.h"
+#include "slog.h"
 
-struct _IO_FILE *log_output;
-
-void log_init(int out) {
+void slog_init(uint8_t out) {
     switch (out) {
         case 0:
-            log_output = stderr;
+            slog_output = stderr;
             break;
         case 1:
-            log_output = stdout;
+            slog_output = stdout;
             break;
     }
 }
 
 int reallog(char *l, ...)  {
     va_list ap;
-    int rc = 0;
 
     unsigned long now = (unsigned long)time(NULL);
     struct json_object *root =json_object_new_object();;
@@ -44,8 +41,8 @@ int reallog(char *l, ...)  {
     }
     va_end(ap);
 
-    fprintf(log_output, "%s\n", json_object_to_json_string(root));
+    int wc = fprintf(slog_output, "%s\n", json_object_to_json_string(root));
     json_object_put(root);
 
-    return  rc;
+    return  wc;
 }
