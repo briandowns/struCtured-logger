@@ -5,3 +5,5 @@ unity/libunity.a
 *.dynlib
 
 .vscode/*
+
+example

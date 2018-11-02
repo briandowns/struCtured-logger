@@ -6,6 +6,19 @@
 
 #include "log.h"
 
+struct _IO_FILE *log_output;
+
+void log_init(int out) {
+    switch (out) {
+        case 0:
+            log_output = stderr;
+            break;
+        case 1:
+            log_output = stdout;
+            break;
+    }
+}
+
 int reallog(char *l, ...)  {
     va_list ap;
     int rc = 0;
@@ -31,7 +44,7 @@ int reallog(char *l, ...)  {
     }
     va_end(ap);
 
-    printf("%s\n", json_object_to_json_string(root));
+    fprintf(log_output, "%s\n", json_object_to_json_string(root));
     json_object_put(root);
 
     return  rc;

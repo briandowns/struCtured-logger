@@ -1,5 +1,6 @@
 #include "log.h"
 
 int main(int argc, char **argv) {
-    log(LOG_INFO, "count", "2", "request", "outbound");
+    log_init(LOG_OUT_STDOUT);
+    log(LOG_INFO, "msg", "records added successfully", "count", "2");
 }
