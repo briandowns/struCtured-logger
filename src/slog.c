@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 
 #include <json-c/json.h>
@@ -11,12 +12,53 @@ void slog_init(FILE *out) {
     slog_output = out;
 }
 
-slog_field_t *slog_field_int(void *value) {
-    slog_field_t *field = malloc(sizeof(slog_field_t)); 
+static slog_field_t *slog_field_new() {
+    slog_field_t *field = malloc(sizeof(slog_field_t));
+    if (field == NULL) {
+        perror("unable to allocation memory for new field");
+        return NULL;
+    }
+    memset(field, 0, sizeof(field));
+    return field;
+}
+
+static void slog_field_free(slog_field_t *sf) {
+    if (sf != NULL) {
+        if (sf->char_value) {
+            free(sf->char_value);
+        }
+        free(sf);
+    }
+}
+
+slog_field_t *slog_int(const int value) {
+    slog_field_t *field = slog_field_new();
     field->type = SLOG_INT;                                    
-    field->int_value = *(int *)value;      
+    field->int_value = value;      
     return field;             
-}                                               
+}      
+
+slog_field_t *slog_int64(const int64_t value) {
+    slog_field_t *field = slog_field_new(); 
+    field->type = SLOG_INT64;                                    
+    field->int64_value = value;      
+    return field;             
+}  
+
+slog_field_t *slog_double(const double value) {
+    slog_field_t *field = slog_field_new(); 
+    field->type = SLOG_DOUBLE;                                    
+    field->double_value = value;      
+    return field;             
+}  
+
+slog_field_t *slog_string(const char *value) {
+    slog_field_t *field = slog_field_new(); 
+    field->type = SLOG_STRING; 
+    field->char_value = malloc(strlen(value)+1);                                   
+    strcpy(field->char_value, value);
+    return field;             
+} 
 
 int reallog(char *l, ...)  {
     va_list ap;
@@ -31,32 +73,25 @@ int reallog(char *l, ...)  {
         if (arg1 == NULL) { 
             break;
         }
+
         if (i % 2 != 0) {
-            // replace this type from char * to slog_field_t and do 
-            // whatever is needed based on the type
-            // char *arg2 = va_arg(ap, char *);
-            // if (arg2 == NULL) {
-            //     break;
-            // }
-            void *arg2 = va_arg(ap, char *);
-            if (arg2 == NULL) {
+            slog_field_t *sf = va_arg(ap, slog_field_t *);
+            if (sf == NULL) {
                 break;
             }
-            slog_field_t *sf = va_arg(ap, char *);
             switch (sf->type) {
                 case SLOG_INT:
-                    json_object_object_add(root, arg1, json_object_new_int((int)arg2));
+                    json_object_object_add(root, arg1, json_object_new_int(sf->int_value));
                     break;
                 case SLOG_INT64:
-                    json_object_object_add(root, arg1, json_object_new_int64((int64_t)arg2));
+                    json_object_object_add(root, arg1, json_object_new_int64(sf->int64_value));
                     break;
                 case SLOG_DOUBLE:
-                    //json_object_object_add(root, arg1, json_object_new_double((double)arg2));
+                    json_object_object_add(root, arg1, json_object_new_double(sf->double_value));
                     break;
                 case SLOG_STRING:
-                    json_object_object_add(root, arg1, json_object_new_string((char *)arg2));
+                    json_object_object_add(root, arg1, json_object_new_string(sf->char_value));
             }
-            //json_object_object_add(root, arg1, json_object_new_string(arg2));
             continue;
         }
     }

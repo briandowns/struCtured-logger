@@ -13,12 +13,19 @@ make example
 ```
 
 ```c
-#include "slog.h"
+#include <stdio.h>
+
+#include "src/slog.h"
 
 int main(int argc, char **argv) {
-    slog_init(SLOG_OUT_STDOUT);
+    slog_init(stdout);
     slog(SLOG_INFO, "msg", "records added successfully", "count", "2");
+    slog(SLOG_INFO, "msg", "records added successfully", "count", slog_field_int(2));
+    slog(SLOG_INFO, "msg", "records added successfully", "count", slog_field_int64(9223372036854775807));
+    slog(SLOG_INFO, "msg", "records added partially", "count", slog_field_int64(3.14));
+    slog(SLOG_INFO, "msg", "record added successfully", "name", slog_field_string("Brian"), "elapsed", slog_field_double(5.76)); 
 }
+
 ```
 
 ## Requirements

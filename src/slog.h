@@ -20,8 +20,8 @@ static enum {
     SLOG_INT,
     SLOG_INT64,
     SLOG_DOUBLE,
-    SLOG_STRING,
-};
+    SLOG_STRING
+} slog_field_types;
 
 /**
  * slog_field_t
@@ -36,7 +36,29 @@ typedef struct {
     };
 } slog_field_t;  
 
-slog_field_t *slog_field_int(void *value);
+/** 
+ * slog_int is used to add an integer value
+ * to the log entry.
+ */
+slog_field_t *slog_int(const int value);
+
+/** 
+ * slog_int64 is used to add a 64 bit integer
+ * value to the log entry.
+ */
+slog_field_t *slog_int64(const int64_t value);
+
+/** 
+ * slog_double is used to add a double to the 
+ * log entry.
+ */
+slog_field_t *slog_double(const double value);
+
+/** 
+ * slog_string is used to add a string to the 
+ * log entry.
+ */
+slog_field_t *slog_string(const char *value);
 
 /**
  * slog_output contains the location we're
