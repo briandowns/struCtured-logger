@@ -89,4 +89,4 @@ int reallog(char *l, ...);
  */
 #define slog(l, ...) ({ reallog(l, __VA_ARGS__, NULL); })
 
-#endif // end _SLOG_H 
+#endif /* end _SLOG_H */
