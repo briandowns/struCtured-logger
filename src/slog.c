@@ -66,6 +66,7 @@ int reallog(char *l, ...)  {
     unsigned long now = (unsigned long)time(NULL); // UNIX timestamp format
     struct json_object *root = json_object_new_object(); 
     json_object_object_add(root, "timestamp", json_object_new_int64(now));
+    json_object_object_add(root, "level", json_object_new_string(l));
 
     va_start(ap, l);
     for (int i = 1; ; i+2) {
