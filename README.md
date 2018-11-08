@@ -6,6 +6,8 @@ struCtured-logger is a simple JSON logger for C applications. This first version
 
 To use this library, call the `slog` macro. This macro takes a log level, a string key, and a slog value. The values supported are int, int64, double, and string. To use one of those as a value, the value needs to be passed as a parameter to one of the associated functions. Ie `slog_int64(6789)`.
 
+For a successful log entry to be made, a key and a value need to be provided. If no value is provided, that field will not be logged.
+
 ## Example 
 
 Build the example:
@@ -21,7 +23,6 @@ make example
 
 int main(int argc, char **argv) {
     slog_init(stdout);
-    slog(SLOG_INFO, "msg", slog_string("records added successfully"), "count", "2");
     slog(SLOG_INFO, "msg", slog_string("records added successfully"), "count", slog_int(2));
     slog(SLOG_INFO, "msg", slog_string("records added successfully"), "count", slog_int64(9223372036854775807));
     slog(SLOG_INFO, "msg", slog_string("records added partially"), "count", slog_int64(3.14));
@@ -32,7 +33,6 @@ int main(int argc, char **argv) {
 Expected output:
 
 ```sh
-{ "timestamp": 1541620673, "level": "info", "msg": "records added successfully" }
 { "timestamp": 1541620673, "level": "info", "msg": "records added successfully", "count": 2 }
 { "timestamp": 1541620673, "level": "info", "msg": "records added successfully", "count": 9223372036854775807 }
 { "timestamp": 1541620673, "level": "info", "msg": "records added partially", "count": 3 }
