@@ -9,3 +9,4 @@ tests/log.c
 .vscode/*
 
 example
+file.log

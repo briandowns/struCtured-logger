@@ -39,6 +39,19 @@ Expected output:
 { "timestamp": 1541620673, "level": "info", "msg": "record added successfully", "name": "Brian", "elapsed": 5.7599999999999998 }
 ```
 
+Write to a log file
+
+```c
+FILE *f = fopen("file.log", "w");
+if (f == NULL) {
+    perror("couldn't open file.log");
+    return 1;
+}
+slog_init(f);
+slog(SLOG_INFO, "msg", slog_string("records added successfully"), "count", slog_int(2));
+fclose(f);
+```
+
 ## Requirements
 
 * [json-c](https://github.com/json-c/json-c) 
