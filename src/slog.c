@@ -12,8 +12,8 @@ void slog_init(FILE *out) {
     slog_output = out;
 }
 
-static slog_field_t *slog_field_new() {
-    slog_field_t *field = malloc(sizeof(slog_field_t));
+static struct slog_field_t *slog_field_new() {
+    struct slog_field_t *field = malloc(sizeof(slog_field_t));
     if (field == NULL) {
         perror("unable to allocation memory for new field");
         return NULL;
@@ -26,17 +26,17 @@ static slog_field_t *slog_field_new() {
  * slog_field_free frees the memory used by the slog_field_t.
  * struct.
  */
-static void slog_field_free(slog_field_t *sf) {
+static void slog_field_free(struct slog_field_t *sf) {
     if (sf != NULL) {
         free(sf);
     }
-}
+} 
 
 /**
  * slog_field_string_free frees the memory used by the string 
  * field and then frees the memory used by the slog_field_t struct.
  */
-static void slog_field_string_free(slog_field_t *sf) {
+static void slog_field_string_free(struct slog_field_t *sf) {
     if (sf != NULL) {
         if (sf->char_value != NULL) {
             free(sf->char_value);
@@ -45,29 +45,29 @@ static void slog_field_string_free(slog_field_t *sf) {
     }
 }
 
-slog_field_t *slog_int(const int value) {
-    slog_field_t *field = slog_field_new();
+struct slog_field_t *slog_int(const int value) {
+    struct slog_field_t *field = slog_field_new();
     field->type = SLOG_INT;                                    
     field->int_value = value;      
     return field;             
 }      
 
-slog_field_t *slog_int64(const int64_t value) {
-    slog_field_t *field = slog_field_new(); 
+struct slog_field_t *slog_int64(const int64_t value) {
+    struct slog_field_t *field = slog_field_new(); 
     field->type = SLOG_INT64;                                    
     field->int64_value = value;      
     return field;             
 }  
 
-slog_field_t *slog_double(const double value) {
-    slog_field_t *field = slog_field_new(); 
+struct slog_field_t *slog_double(const double value) {
+    struct slog_field_t *field = slog_field_new(); 
     field->type = SLOG_DOUBLE;                                    
     field->double_value = value;      
     return field;             
 }  
 
-slog_field_t *slog_string(const char *value) {
-    slog_field_t *field = slog_field_new(); 
+struct slog_field_t *slog_string(const char *value) {
+    struct slog_field_t *field = slog_field_new(); 
     field->type = SLOG_STRING; 
     field->char_value = malloc(strlen(value)+1);                                   
     strcpy(field->char_value, value);
@@ -90,7 +90,7 @@ int reallog(char *l, ...)  {
         }
 
         if (i % 2 != 0) {
-            slog_field_t *sf = va_arg(ap, slog_field_t *);
+            struct slog_field_t *sf = va_arg(ap, struct slog_field_t *);
             if (sf == NULL) {
                 break;
             }
