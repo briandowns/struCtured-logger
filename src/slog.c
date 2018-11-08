@@ -22,12 +22,26 @@ static slog_field_t *slog_field_new() {
     return field;
 }
 
+/**
+ * slog_field_free frees the memory used by the slog_field_t.
+ * struct.
+ */
 static void slog_field_free(slog_field_t *sf) {
     if (sf != NULL) {
-        if (sf->char_value) {
+        free(sf);
+    }
+}
+
+/**
+ * slog_field_string_free frees the memory used by the string 
+ * field and then frees the memory used by the slog_field_t struct.
+ */
+static void slog_field_string_free(slog_field_t *sf) {
+    if (sf != NULL) {
+        if (sf->char_value != NULL) {
             free(sf->char_value);
         }
-        free(sf);
+        slog_field_free(sf);
     }
 }
 
@@ -83,15 +97,19 @@ int reallog(char *l, ...)  {
             switch (sf->type) {
                 case SLOG_INT:
                     json_object_object_add(root, arg1, json_object_new_int(sf->int_value));
+                    slog_field_free(sf);
                     break;
                 case SLOG_INT64:
                     json_object_object_add(root, arg1, json_object_new_int64(sf->int64_value));
+                    slog_field_free(sf);
                     break;
                 case SLOG_DOUBLE:
                     json_object_object_add(root, arg1, json_object_new_double(sf->double_value));
+                    slog_field_free(sf);
                     break;
                 case SLOG_STRING:
                     json_object_object_add(root, arg1, json_object_new_string(sf->char_value));
+                    slog_field_string_free(sf);
             }
             continue;
         }
