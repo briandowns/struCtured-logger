@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include <unity/unity.h>
+#include "unity/unity.h"
 
 #include "../src/slog.h"
 

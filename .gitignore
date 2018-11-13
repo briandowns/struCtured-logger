@@ -4,7 +4,7 @@ tests/log.c
 
 *.o
 *.so
-*.dynlib
+*.dylib
 
 .vscode/*
 

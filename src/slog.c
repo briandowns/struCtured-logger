@@ -18,7 +18,7 @@ static struct slog_field_t *slog_field_new() {
         perror("unable to allocation memory for new field");
         return NULL;
     }
-    memset(field, 0, sizeof(field));
+    memset(field, 0, sizeof(slog_field_t));
     return field;
 }
 
@@ -83,7 +83,7 @@ int reallog(char *l, ...)  {
     json_object_object_add(root, "level", json_object_new_string(l));
 
     va_start(ap, l);
-    for (int i = 1; ; i+2) {
+    for (int i = 1; ; i += 2) {
         char *arg1 = va_arg(ap, char *);
         if (arg1 == NULL) { 
             break;
