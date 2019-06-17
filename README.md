@@ -4,7 +4,7 @@ struCtured-logger is a simple JSON logger for C applications. This first version
 
 ## Use
 
-To use this library, call the `slog` macro. This macro takes a log level, a string key, and a slog value. The values supported are int, int64, double, and string. To use one of those as a value, the value needs to be passed as a parameter to one of the associated functions. Ie `slog_int64(6789)`.
+To use this library, call the `log` macro. This macro takes a log level, a string key, and a log value. The values supported are int, int64, double, and string. To use one of those as a value, the value needs to be passed as a parameter to one of the associated functions. Ie `log_int64(6789)`.
 
 For a successful log entry to be made, a key and a value need to be provided. If no value is provided, that field will not be logged.
 
@@ -19,14 +19,14 @@ make example
 ```c
 #include <stdio.h>
 
-#include "src/slog.h"
+#include "log.h"
 
 int main(int argc, char **argv) {
-    slog_init(stdout);
-    slog(SLOG_INFO, "msg", slog_string("records added successfully"), "count", slog_int(2));
-    slog(SLOG_INFO, "msg", slog_string("records added successfully"), "count", slog_int64(9223372036854775807));
-    slog(SLOG_INFO, "msg", slog_string("records added partially"), "count", slog_int64(3.14));
-    slog(SLOG_INFO, "msg", slog_string("record added successfully"), "name", slog_string("Brian"), "elapsed", slog_double(5.76)); 
+    log_init(stdout);
+    log(LOG_INFO, "msg", log_string("records added successfully"), "count", log_int(2));
+    log(LOG_INFO, "msg", log_string("records added successfully"), "count", log_int64(9223372036854775807));
+    log(LOG_INFO, "msg", log_string("records added partially"), "count", log_int64(3.14));
+    log(LOG_INFO, "msg", log_string("record added successfully"), "name", log_string("Brian"), "elapsed", log_double(5.76)); 
 }
 ```
 
@@ -47,8 +47,8 @@ if (f == NULL) {
     perror("couldn't open file.log");
     return 1;
 }
-slog_init(f);
-slog(SLOG_INFO, "msg", slog_string("records added successfully"), "count", slog_int(2));
+log_init(f);
+log(LOG_INFO, "msg", log_string("records added successfully"), "count", log_int(2));
 fclose(f);
 ```
 

@@ -1,36 +1,36 @@
-CC = gcc
+CC = cc
 CFLAGS = -Wall -ljson-c
-NAME = slog
+NAME = log
 
 VERSION := 01
 
 UNAME_S := $(shell uname -s)
 
-SRCDIR := ./src
 TSTDIR := ./tests
 INCDIR := /usr/local/include
 
 ifeq ($(UNAME_S),Linux)
 $(NAME).$(VERSION).so:
-	$(CC) -shared -o $(NAME).$(VERSION).so $(SRCDIR)/$(NAME).c $(CFLAGS)
+	$(CC) -shared -o $(NAME).$(VERSION).so $(NAME).c $(CFLAGS)
 endif
 ifeq ($(UNAME_S),Darwin)
 $(NAME).$(VERSION).dylib:
-	$(CC) -dynamiclib -o $(NAME).$(VERSION).dylib $(SRCDIR)/$(NAME).c $(CFLAGS)
+	$(CC) -dynamiclib -o $(NAME).$(VERSION).dylib $(NAME).c $(CFLAGS)
 endif
 
 .PHONY: install
 install: 
-	cp $(SRCDIR)/$(NAME).h $(INCDIR)
+	cp $(NAME).h $(INCDIR)
 ifeq ($(UNAME_S),Linux)
 	cp $(NAME).$(VERSION).so $(INCDIR)
 endif
 ifeq ($(UNAME_S),Darwin)
-	cp $(NAME).$(VERSION).dylib $(INCDIR)
+	cp $(NAME).$(VEWRSION).dylib /usr/local/lib/lib$(NAME).dylib
 endif
 
 uninstall:
-	rm -f $(INCDIR)/$(SRCDIR)/$(NAME).h
+	rm -f $(INCDIR)/$(NAME).h
+	rm -f /usr/local/lib/lib$(NAME).dylib
 ifeq ($(UNAME_S),Linux)
 	rm -f $(INCDIR)/$(NAME).$(VERSION).so
 endif
@@ -40,7 +40,7 @@ endif
 
 .PHONY:
 test: clean
-	$(CC) -o $(TSTDIR)/$(TSTDIR) $(TSTDIR)/$(TSTDIR).c $(SRCDIR)/slog.c $(TSTDIR)/unity/unity.c $(CFLAGS)
+	$(CC) -o $(TSTDIR)/$(TSTDIR) $(TSTDIR)/$(TSTDIR).c log.c $(TSTDIR)/unity/unity.c $(CFLAGS)
 	$(TSTDIR)/$(TSTDIR)
 	rm -f $(TSTDIR)/$(TSTDIR)
 
