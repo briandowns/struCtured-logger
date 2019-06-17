@@ -18,7 +18,7 @@ log_field_t*
 log_field_new()
 {
     struct log_field_t *field = malloc(sizeof(log_field_t));
-    if (field == NULL) {
+    if (!field) {
         perror("unable to allocation memory for new field");
         return NULL;
     }
@@ -33,7 +33,7 @@ log_field_new()
 static void
 field_free(struct log_field_t *sf)
 {
-    if (sf != NULL) {
+    if (sf) {
         free(sf);
     }
 } 
@@ -45,8 +45,8 @@ field_free(struct log_field_t *sf)
 static void
 field_string_free(struct log_field_t *sf)
 {
-    if (sf != NULL) {
-        if (sf->char_value != NULL) {
+    if (sf) {
+        if (sf->char_value) {
             free(sf->char_value);
         }
         field_free(sf);
@@ -90,7 +90,8 @@ log_string(const char *value)
     return field;             
 } 
 
-int reallog(char *l, ...)
+int 
+reallog(char *l, ...)
 {
     va_list ap;
 
@@ -102,13 +103,13 @@ int reallog(char *l, ...)
     va_start(ap, l);
     for (int i = 1; ; i += 2) {
         char *arg1 = va_arg(ap, char *);
-        if (arg1 == NULL) { 
+        if (!arg1) { 
             break;
         }
 
         if (i % 2 != 0) {
             struct log_field_t *sf = va_arg(ap, struct log_field_t *);
-            if (sf == NULL) {
+            if (!sf) {
                 break;
             }
             switch (sf->type) {
